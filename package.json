@@ -1,43 +1,49 @@
 {
-    "name": "@warrantdev/warrant-js",
-    "version": "3.2.0",
-    "description": "JavaScript Library to Use Warrant in Client Applications",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "files": [
-        "/dist/**/*",
-        "README.md"
-    ],
-    "scripts": {
-        "build": "webpack --mode production --config webpack.config.js",
-        "build-local": "npm run build && npm pack",
-        "prepare": "npm run build",
-        "test": "npm run build && mocha"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/warrant-dev/warrant-js.git"
-    },
-    "keywords": [
-        "warrant",
-        "authorization",
-        "rbac",
-        "role based access control",
-        "access control"
-    ],
-    "author": "Warrant <hello@warrant.dev> (https://warrant.dev)",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/warrant-dev/warrant-js/issues"
-    },
-    "homepage": "https://github.com/warrant-dev/warrant-js#readme",
-    "devDependencies": {
-        "@warrantdev/warrant-node": "^3.2.0",
-        "mocha": "^10.2.0",
-        "ts-loader": "^9.2.3",
-        "typescript": "^4.3.4",
-        "webpack": "^5.41.1",
-        "webpack-cli": "^4.7.2",
-        "xmlhttprequest": "^1.8.0"
-    }
+  "name": "@auth4flow/auth4flow-js",
+  "version": "0.1.0",
+  "description": "JavaScript Library to Use Auth4Flow in Client Applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "webpack --mode production --config webpack.config.js",
+    "build-local": "npm run build && npm pack",
+    "prepare": "npm run build",
+    "test": "npm run build && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Auth4Flow/Auth4Flow-JS.git"
+  },
+  "keywords": [
+    "auth4flow",
+    "authentication",
+    "identity",
+    "web3",
+    "flow",
+    "iam",
+    "warrant",
+    "authorization",
+    "rbac",
+    "role based access control",
+    "access control"
+  ],
+  "author": "BoiseITGuru <dev@boiseitguru.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Auth4Flow/Auth4Flow-JS/issues"
+  },
+  "homepage": "https://github.com/Auth4Flow/Auth4Flow-JS#readme",
+  "devDependencies": {
+    "@warrantdev/warrant-node": "^3.2.0",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.4",
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2",
+    "xmlhttprequest": "^1.8.0"
+  }
 }

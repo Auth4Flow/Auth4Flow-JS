@@ -1,2 +1,2 @@
 export * from "./types";
-export { default as WarrantClient } from "./WarrantClient";
+export { default as Auth4FlowClient } from "./Auth4FlowClient";
