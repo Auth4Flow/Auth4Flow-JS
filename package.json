@@ -45,5 +45,8 @@
     "webpack": "^5.41.1",
     "webpack-cli": "^4.7.2",
     "xmlhttprequest": "^1.8.0"
+  },
+  "dependencies": {
+    "@onflow/fcl": "^1.4.1"
   }
 }

@@ -9,8 +9,11 @@ import Check, {
   PermissionCheck,
 } from "./types/Check";
 import Permission from "./types/Permission";
+import Nonce from "./types/Nonce";
 import ApiClient from "./HttpClient";
 import { isWarrantObject } from "./types/WarrantObject";
+import * as fcl from "@onflow/fcl";
+import { Service } from "@onflow/fcl/types/discovery/services/authn";
 
 export default class Auth4FlowClient {
   private readonly config: Config;
@@ -22,6 +25,46 @@ export default class Auth4FlowClient {
       sessionToken: this.config.sessionToken,
       baseUrl: this.config.endpoint || API_URL_BASE,
     });
+
+    fcl.config().put("fcl.accountProof.resolver", this.resolver);
+  }
+
+  public setSessionToken(token: string) {
+    this.config.sessionToken = token;
+    this.httpClient.setSessionToken(token);
+  }
+
+  public async resolver(): Promise<Nonce> {
+    const response = await this.httpClient.get({
+      url: "/v1/nonce",
+    });
+
+    const { nonce } = await response.json();
+    return {
+      appIdentifier: "JacobRocks",
+      nonce,
+    };
+  }
+
+  public async login() {
+    let res = await fcl.authenticate();
+
+    const accountProofService = res.services.find(
+      (services: Service) => services.type === "account-proof"
+    );
+
+    if (accountProofService) {
+      const response = await this.httpClient.post({
+        url: "/v1/session",
+        data: JSON.stringify(accountProofService.data),
+      });
+
+      const verified = await response.json();
+      console.log(verified);
+      return;
+    }
+
+    fcl.unauthenticate();
   }
 
   public async check(check: Check): Promise<boolean> {
