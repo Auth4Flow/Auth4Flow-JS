@@ -9,9 +9,9 @@ import Check, {
   PermissionCheck,
 } from "./types/Check";
 import Permission from "./types/Permission";
-import Nonce from "./types/Nonce";
 import ApiClient from "./HttpClient";
 import { isWarrantObject } from "./types/WarrantObject";
+import Nonce from "./types/Nonce";
 import * as fcl from "@onflow/fcl";
 import { Service } from "@onflow/fcl/types/discovery/services/authn";
 
@@ -26,27 +26,33 @@ export default class Auth4FlowClient {
       baseUrl: this.config.endpoint || API_URL_BASE,
     });
 
-    fcl.config().put("fcl.accountProof.resolver", this.resolver);
+    const resolver = async (): Promise<Nonce> => {
+      const url = `${this.config.endpoint || API_URL_BASE}/v1/nonce`;
+      console.log("did call");
+
+      /* @ts-ignore */
+      const response = await fetch(url);
+      const { appIdentifier, nonce } = await response.json();
+
+      const returnObject = {
+        appIdentifier,
+        nonce,
+      };
+
+      console.log(returnObject);
+
+      return returnObject;
+    };
+
+    fcl.config().put("fcl.accountProof.resolver", resolver);
   }
 
-  public setSessionToken(token: string) {
+  public setSessionToken(token: string): void {
     this.config.sessionToken = token;
     this.httpClient.setSessionToken(token);
   }
 
-  public async resolver(): Promise<Nonce> {
-    const response = await this.httpClient.get({
-      url: "/v1/nonce",
-    });
-
-    const { nonce } = await response.json();
-    return {
-      appIdentifier: "JacobRocks",
-      nonce,
-    };
-  }
-
-  public async login() {
+  public async login(): Promise<void> {
     let res = await fcl.authenticate();
 
     const accountProofService = res.services.find(
@@ -56,7 +62,7 @@ export default class Auth4FlowClient {
     if (accountProofService) {
       const response = await this.httpClient.post({
         url: "/v1/session",
-        data: JSON.stringify(accountProofService.data),
+        data: accountProofService.data,
       });
 
       const verified = await response.json();
@@ -65,6 +71,8 @@ export default class Auth4FlowClient {
     }
 
     fcl.unauthenticate();
+
+    return;
   }
 
   public async check(check: Check): Promise<boolean> {

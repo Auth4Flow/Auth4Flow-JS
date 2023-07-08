@@ -71,7 +71,8 @@ export default class ApiClient implements HttpClient {
   ): [string, RequestHeaders] {
     let baseUrl = this.config.baseUrl;
     const headers = {
-      "User-Agent": `warrant-js/${PACKAGE_VERSION}`,
+      "Content-Type": "application/json",
+      "User-Agent": `Auth4Flow-JS/${PACKAGE_VERSION}`,
       Authorization: `Bearer ${this.config.sessionToken}`,
     };
 

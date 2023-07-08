@@ -1,5 +1,5 @@
 export default interface Config {
-    clientKey: string;
-    sessionToken: string;
-    endpoint?: string;
+  clientKey: string;
+  sessionToken: string;
+  endpoint: string;
 }
