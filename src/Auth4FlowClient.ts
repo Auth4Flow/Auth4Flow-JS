@@ -21,27 +21,15 @@ export default class Auth4FlowClient {
 
   constructor(config: Config) {
     this.config = config;
-    this.httpClient = new ApiClient({
-      sessionToken: this.config.sessionToken,
-      baseUrl: this.config.endpoint || API_URL_BASE,
-    });
+    this.httpClient = new ApiClient(this.config);
 
     const resolver = async (): Promise<Nonce> => {
       const url = `${this.config.endpoint || API_URL_BASE}/v1/nonce`;
-      console.log("did call");
 
       /* @ts-ignore */
       const response = await fetch(url);
-      const { appIdentifier, nonce } = await response.json();
 
-      const returnObject = {
-        appIdentifier,
-        nonce,
-      };
-
-      console.log(returnObject);
-
-      return returnObject;
+      return await response.json();
     };
 
     fcl.config().put("fcl.accountProof.resolver", resolver);
@@ -53,7 +41,7 @@ export default class Auth4FlowClient {
   }
 
   public async login(): Promise<void> {
-    let res = await fcl.authenticate();
+    let res = await fcl.reauthenticate();
 
     const accountProofService = res.services.find(
       (services: Service) => services.type === "account-proof"
@@ -65,8 +53,9 @@ export default class Auth4FlowClient {
         data: accountProofService.data,
       });
 
-      const verified = await response.json();
-      console.log(verified);
+      if (response.sessionId) {
+        this.setSessionToken(response.sessionId);
+      }
       return;
     }
 

@@ -1,14 +1,11 @@
 const PACKAGE_VERSION = require("../package.json").version;
+import { API_URL_BASE } from "./constants";
 import ApiError from "./types/ApiError";
+import Config from "./types/Config";
 
 interface HttpClient {
   get(requestOptions: HttpClientRequestOptions): Promise<any>;
   post(requestOptions: HttpClientRequestOptions): Promise<any>;
-}
-
-export interface HttpClientConfig {
-  sessionToken: string;
-  baseUrl: string;
 }
 
 export interface HttpClientRequestOptions {
@@ -24,9 +21,9 @@ interface RequestHeaders {
 }
 
 export default class ApiClient implements HttpClient {
-  private config: HttpClientConfig;
+  private config: Config;
 
-  constructor(config: HttpClientConfig) {
+  constructor(config: Config) {
     this.config = config;
   }
 
@@ -46,7 +43,7 @@ export default class ApiClient implements HttpClient {
       throw this.buildError(await response.json());
     }
 
-    return response.json();
+    return await response.json();
   }
 
   public async post(requestOptions: HttpClientRequestOptions): Promise<any> {
@@ -63,18 +60,22 @@ export default class ApiClient implements HttpClient {
       throw this.buildError(await response.json());
     }
 
-    return response.json();
+    return await response.json();
   }
 
   private buildRequestUrlAndHeaders(
     requestOptions?: HttpClientRequestOptions
   ): [string, RequestHeaders] {
-    let baseUrl = this.config.baseUrl;
+    let baseUrl = this.config.endpoint || API_URL_BASE;
     const headers = {
       "Content-Type": "application/json",
       "User-Agent": `Auth4Flow-JS/${PACKAGE_VERSION}`,
-      Authorization: `Bearer ${this.config.sessionToken}`,
+      Authorization: `Bearer None`,
     };
+
+    if (this.config.sessionToken) {
+      headers["Authorization"] = `Bearer ${this.config.sessionToken}`;
+    }
 
     if (requestOptions?.sessionToken) {
       headers["Authorization"] = `Bearer ${requestOptions.sessionToken}`;
