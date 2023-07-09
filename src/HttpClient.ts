@@ -70,7 +70,7 @@ export default class ApiClient implements HttpClient {
     const headers = {
       "Content-Type": "application/json",
       "User-Agent": `Auth4Flow-JS/${PACKAGE_VERSION}`,
-      Authorization: `Bearer None`,
+      Authorization: `None None`,
     };
 
     if (this.config.sessionToken) {
