@@ -40,7 +40,7 @@ export default class Auth4FlowClient {
     this.httpClient.setSessionToken(token);
   }
 
-  public async login(): Promise<void> {
+  public async login(): Promise<string> {
     let res = await fcl.reauthenticate();
 
     const accountProofService = res.services.find(
@@ -55,13 +55,21 @@ export default class Auth4FlowClient {
 
       if (response.sessionId) {
         this.setSessionToken(response.sessionId);
+        return response.sessionId;
       }
-      return;
     }
 
     fcl.unauthenticate();
 
     return;
+  }
+
+  public async verifySession(): Promise<boolean> {
+    const response = await this.httpClient.post({
+      url: "/v1/session/verify",
+    });
+
+    return response.result === "Valid";
   }
 
   public async check(check: Check): Promise<boolean> {
