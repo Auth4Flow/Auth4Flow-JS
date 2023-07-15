@@ -15,7 +15,7 @@ import Nonce from "./types/Nonce";
 import * as fcl from "@onflow/fcl";
 import { Service } from "@onflow/fcl/types/discovery/services/authn";
 
-export default class Auth4FlowClient {
+export default class Forge4FlowClient {
   private readonly config: Config;
   private readonly httpClient: ApiClient;
 
@@ -65,7 +65,7 @@ export default class Auth4FlowClient {
   }
 
   public async verifySession(): Promise<boolean> {
-    const response = await this.httpClient.post({
+    const response = await this.httpClient.get({
       url: "/v1/session/verify",
     });
 

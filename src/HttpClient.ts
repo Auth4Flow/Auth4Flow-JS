@@ -69,7 +69,7 @@ export default class ApiClient implements HttpClient {
     let baseUrl = this.config.endpoint || API_URL_BASE;
     const headers = {
       "Content-Type": "application/json",
-      "User-Agent": `Auth4Flow-JS/${PACKAGE_VERSION}`,
+      "User-Agent": `Forge4Flow-JS/${PACKAGE_VERSION}`,
       Authorization: `None None`,
     };
 

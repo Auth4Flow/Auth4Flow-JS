@@ -20,7 +20,7 @@ module.exports = (env) => {
 
     output: {
       library: {
-        name: "auth4flow-js",
+        name: "forge4flow-js",
         type: "umd",
       },
 

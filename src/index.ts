@@ -1,2 +1,2 @@
 export * from "./types";
-export { default as Auth4FlowClient } from "./Auth4FlowClient";
+export { default as Forge4FlowClient } from "./Forge4FlowClient";
