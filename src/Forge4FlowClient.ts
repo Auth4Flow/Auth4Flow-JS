@@ -41,7 +41,7 @@ export default class Forge4FlowClient {
   }
 
   public async login(): Promise<string> {
-    let res = await fcl.reauthenticate();
+    const res = await fcl.reauthenticate();
 
     const accountProofService = res.services.find(
       (services: Service) => services.type === "account-proof"
