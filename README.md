@@ -1,30 +1,34 @@
-# @warrantdev/warrant-js
+# @forge4flow/forge4flow-js
 
-Use [Warrant](https://warrant.dev/) as an ES module.
+Use [Forge4FlowClient](https://forge4Flow.dev/) as an ES module.
 
-[![npm](https://img.shields.io/npm/v/@warrantdev/warrant-js)](https://www.npmjs.com/package/@warrantdev/warrant-js)
-[![Slack](https://img.shields.io/badge/slack-join-brightgreen)](https://join.slack.com/t/warrantcommunity/shared_invite/zt-12g84updv-5l1pktJf2bI5WIKN4_~f4w)
+[![npm](https://img.shields.io/npm/v/@forge4flow/forge4flow-js)](https://www.npmjs.com/package/@forge4flow/forge4flow-js)
 
 ## Installation
 
-Use `npm` to install the Warrant module:
+Use `npm` to install the Forge4FlowClient module:
 
 ```sh
-npm install @warrantdev/warrant-js
+npm install @forge4flow/forge4flow-js
 ```
 
 ## Usage
 
-Import the Warrant client and pass a valid Config object to the constructor to get started:
+Import the Forge4FlowClient and initiate the client & login or pass a sessionToken in as part of the configurations:
+
+> IMPORTANT: Ensure you have configured FCL alrady or these methods will fails
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
+import Forge4FlowClient from "@forge4flow/forge4flow-js";
 
 // A valid session token is required to initialize the Client
-const warrant = new Warrant({
+const forge4Flow = new Forge4FlowClient({
   clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
+  endpoint: "https://your-core-endpont",
+  sessionToken: "Optional Value", // DO NOT CALL LOGIN IF PASSING IN A SESSION TOKEN
 });
+
+forge4Flow.login();
 ```
 
 ### `check`
@@ -32,41 +36,27 @@ const warrant = new Warrant({
 This function returns a `Promise` that resolves with `true` if the user for the current session token has the specified `warrant` and `false` otherwise.
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
 //
 // Example Scenario:
 // An e-commerce website where Store Owners can edit their own Store's info
 //
-warrant.check({ object: myReport, relation: "editor" }).then((isAuthorized) => {
-  if (isAuthorized) {
-    // Carry out logic to allow user to edit a Store
-  }
-});
+forge4Flow
+  .check({ object: myReport, relation: "editor" })
+  .then((isAuthorized) => {
+    if (isAuthorized) {
+      // Carry out logic to allow user to edit a Store
+    }
+  });
 ```
 
 Or using async/await:
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
 //
 // Example Scenario:
 // An e-commerce website where Store Owners can edit their own Store's info
 //
-const isAuthorized = await warrant.check({
+const isAuthorized = await forge4Flow.check({
   object: myReport,
   relation: "editor",
 });
@@ -84,15 +74,7 @@ This function returns a `Promise` that resolves with `true` if the user for the 
 **CheckOp.AllOf** specifies that the access check request will be authorized if _all of_ the warrants are matched and will not be authorized otherwise.
 
 ```js
-import Warrant, { CheckOp } from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-warrant
+forge4Flow
   .checkMany({
     op: CheckOp.AllOf,
     warrants: [
@@ -116,15 +98,7 @@ warrant
 Or using async/await:
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-const isAuthorized = await warrant.checkMany({
+const isAuthorized = await forge4Flow.checkMany({
   op: CheckOp.AllOf,
   warrants: [
     {
@@ -147,33 +121,19 @@ if (isAuthorized) {
 This function returns a `Promise` that resolves with `true` if the user for the current session token has the specified permission and `false` otherwise.
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-warrant.hasPermission({ permissionId: "view-items" }).then((canViewItems) => {
-  if (canViewItems) {
-    // Carry out logic if user has permission view-items
-  }
-});
+forge4Flow
+  .hasPermission({ permissionId: "view-items" })
+  .then((canViewItems) => {
+    if (canViewItems) {
+      // Carry out logic if user has permission view-items
+    }
+  });
 ```
 
 Or using async/await:
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-const canViewItems = await warrant.hasPermission({
+const canViewItems = await forge4Flow.hasPermission({
   permissionId: "view-items",
 });
 if (canViewItems) {
@@ -186,15 +146,7 @@ if (canViewItems) {
 This function returns a `Promise` that resolves with `true` if the user for the current session token has the specified feature and `false` otherwise.
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-warrant.hasFeature({ featureId: "save-items" }).then((canSaveItems) => {
+forge4Flow.hasFeature({ featureId: "save-items" }).then((canSaveItems) => {
   if (canSaveItems) {
     // Carry out logic if user has feature save-items
   }
@@ -204,35 +156,8 @@ warrant.hasFeature({ featureId: "save-items" }).then((canSaveItems) => {
 Or using async/await:
 
 ```js
-import Warrant from "@warrantdev/warrant-js";
-
-// A valid session token is required to initialize the Client
-const warrant = new Warrant({
-  clientKey: "client_test_f5dsKVeYnVSLHGje44zAygqgqXiLJBICbFzCiAg1E=",
-  sessionToken: "sess_test_f9asdfASD90mkj2jXZIaeoqbIUAIjsJAHSAnsndW=",
-});
-
-const canSaveItems = await warrant.hasFeature({ featureId: "save-items" });
+const canSaveItems = await forge4Flow.hasFeature({ featureId: "save-items" });
 if (canSaveItems) {
   // Carry out logic if user has feature save-items
 }
 ```
-
-We’ve used a random Client Key in these code examples. Replace it with your
-[actual publishable Client Key](https://app.warrant.dev) to
-test this code through your own Warrant account.
-
-For more information on how to use the Warrant API, please refer to the
-[Warrant API reference](https://docs.warrant.dev).
-
-## TypeScript support
-
-This package includes TypeScript declarations for Warrant.
-
-Note that we may release new [minor and patch](https://semver.org/) versions of
-`@warrantdev/warrant-js` with small but backwards-incompatible fixes to the type
-declarations. These changes will not affect Warrant itself.
-
-## Warrant Documentation
-
-- [Warrant Docs](https://docs.warrant.dev/)

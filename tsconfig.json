@@ -1,14 +1,14 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "esnext",
-        "lib": ["es6"],
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "declaration": true,
-        "declarationDir": "dist",
-        "noImplicitAny": true,
-    },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "noImplicitAny": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

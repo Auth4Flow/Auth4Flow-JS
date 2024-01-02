@@ -13,7 +13,7 @@ import ApiClient from "./HttpClient";
 import { isWarrantObject } from "./types/WarrantObject";
 import Nonce from "./types/Nonce";
 import * as fcl from "@onflow/fcl";
-import { Service } from "@onflow/fcl/types/discovery/services/authn";
+import { Service } from "@onflow/typedefs";
 
 export default class Forge4FlowClient {
   private readonly config: Config;
@@ -29,7 +29,7 @@ export default class Forge4FlowClient {
       /* @ts-ignore */
       const response = await fetch(url);
 
-      return await response.json();
+      return (await response.json()) as Nonce;
     };
 
     fcl.config().put("fcl.accountProof.resolver", resolver);

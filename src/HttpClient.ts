@@ -39,7 +39,7 @@ export default class ApiClient implements HttpClient {
       method: "GET",
       headers: requestHeaders,
     });
-    if (!response.ok) {
+    if (!response.ok && response.status != 401) {
       throw this.buildError(await response.json());
     }
 
@@ -56,7 +56,7 @@ export default class ApiClient implements HttpClient {
       body: JSON.stringify(requestOptions.data),
     });
 
-    if (!response.ok) {
+    if (!response.ok && response.status != 401) {
       throw this.buildError(await response.json());
     }
 
